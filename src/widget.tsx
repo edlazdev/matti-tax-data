@@ -2,13 +2,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 class TaxDataWidgetElement extends HTMLElement {
-  private readonly mountPoint: HTMLDivElement;
+   mountPoint: HTMLDivElement;
 
   constructor() {
     super();
     this.mountPoint = document.createElement("div");
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.mountPoint);
+    this.attachShadow({ mode: "open" }).appendChild(this.mountPoint);
   }
 
   connectedCallback() {
