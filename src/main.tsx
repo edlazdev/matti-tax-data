@@ -12,7 +12,7 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <PrimeReactProvider>
-       <App />
+       <App color="blue" title="Tax Data App" data={null} />
     </PrimeReactProvider>
   </StrictMode>,
 )
