@@ -60,7 +60,7 @@ const TaxDataForm = () => {
     control,
     handleSubmit,
     watch,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
