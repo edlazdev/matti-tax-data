@@ -25,11 +25,17 @@ export default defineConfig({
     lib: {
       entry: "src/widget.tsx",
       name: "TaxDataWidget",
-      fileName: "tax-data-widget",
-      formats: ["umd"],
+      fileName: (format) => `tax-data-widget.${format}.js`,
+      formats: ["umd", "es"],
     },
     rollupOptions: {
-      external: ["react", "react-dom"]
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        }
+      }
     },
   },
 });
