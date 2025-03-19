@@ -20,22 +20,5 @@ export default defineConfig({
         additionalData: `@use "@/styles/themes/_variables.scss" as *;`,
       },
     },
-  },
-  build: {
-    lib: {
-      entry: "src/widget.tsx",
-      name: "TaxDataWidget",
-      fileName: (format) => `tax-data-widget.${format}.js`,
-      formats: ["umd", "es"],
-    },
-    rollupOptions: {
-      external: ["react", "react-dom"],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM'
-        }
-      }
-    },
-  },
+  }
 });
