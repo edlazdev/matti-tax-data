@@ -1,0 +1,9 @@
+.fiscal-form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    .p-error {
+        margin-bottom: .5rem;
+    }
+}
