@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { useTaxDataStore } from "@store/useTaxData";
+import { useTaxDataStore } from "@/store/useTaxData";
+import IconButton from "./IconButton";
 
 const TaxDataList = () => {
-  const { taxData, setAction, removeTaxData, changeVerification } = useTaxDataStore();
+  const { taxData, setAction, removeTaxData, changeVerification } =
+    useTaxDataStore();
 
   const cardHeader = (id: string, rfc: string, verified: boolean) => (
     <div className="flex  align-items-center justify-content-between">
@@ -19,9 +21,9 @@ const TaxDataList = () => {
         />
       ) : (
         <Button
-          icon="pi pi-sync"
-          className="p-button-text p-button-sm"
-          tooltip="Elegir"
+          label="Elegir"
+          size="small"
+          severity="warning"
           onClick={() => changeVerification(id)}
         />
       )}
@@ -33,37 +35,37 @@ const TaxDataList = () => {
       <Button
         icon="pi pi-trash"
         className="p-button-text p-button-sm"
-        tooltip="Eliminar"
-        severity="secondary"
+        severity="danger"
         tooltipOptions={{ position: "bottom" }}
         onClick={() => removeTaxData(id)}
+        rounded
+        text
       />
       <Button
         icon="pi pi-pencil"
         className="p-button-text p-button-sm"
-        tooltip="Editar"
         tooltipOptions={{ position: "bottom" }}
         severity="secondary"
         onClick={() => setAction("edit")}
+        rounded
+        text
       />
     </div>
   );
 
   return (
-    <div className="min-h-screen flex flex-column">
+    <div className="flex flex-column gap-4">
       <div className="flex align-items-center gap-3">
-        <Button
-          icon="pi pi-arrow-left"
-          severity="success"
-          rounded
-          size="small"
+        <IconButton
+          iconClass="pi pi-arrow-left"
+          onClick={() => alert("Hola")}
         />
-        <p className="text-4xl font-bold">Datos Fiscales</p>
+        <p className="text-2xl sm:text-3xl font-bold">Datos Fiscales</p>
       </div>
 
-      <div className="text-left py-3">
-        <p>Aquí puedes gestionar tus datos fiscales registrados.</p>
-      </div>
+      <p className="p-0 m-0 text-left text-sm sm:text-base">
+        Aquí puedes gestionar tus datos fiscales registrados.
+      </p>
 
       <div className="grid justify-content-center">
         {taxData.map((data: any) => (
@@ -72,7 +74,7 @@ const TaxDataList = () => {
               header={cardHeader(data.id, data.rfc, data.verified)}
               footer={cardFooter(data.id)}
               className="shadow-2 relative"
-            > 
+            >
               <p className="text-xs">Nombre: {data.name}</p>
               <p className="text-xs">Correo electronico: {data.email}</p>
               <p className="text-xs">Régimen Fiscal: {data.regimen}</p>

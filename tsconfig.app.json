@@ -10,9 +10,9 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
-      "@store/*": ["./src/store/*"],
-      "@config/*": ["./src/config/*"],
-      "@assets/*": ["./src/assets/*"],
+      "@/store/*": ["./src/store/*"],
+      "@/config/*": ["./src/config/*"],
+      "@/assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
     },
 

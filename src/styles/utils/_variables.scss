@@ -1,0 +1,61 @@
+// src/styles/themes/_variables.scss
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$danger-color: #dc3545;
+$success-color: #28a745;
+$background-color: #f8f9fa;
+$text-color: #212529;
+
+// Fuentes y tamaños
+$font-family: 'Boston Regular', Helvetica, Arial, Verdana, Tahoma, sans-serif;
+$font-size-base: 16px;
+
+// Espaciados
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+
+
+:root {
+    --secondary-teal: #0AB39C;
+    --secondary-teal-50: #DFF3F2;
+    --boston-regular: 'Boston Regular', Helvetica, Arial, Verdana, Tahoma, sans-serif;
+    
+    
+    // --primary-color: #007bff;         /* Color principal */
+    --primary-color-text: #1F2021;    /* Color del texto sobre el primary */
+     
+    // --highlight-bg: #007bff;           /* Fondo de selección */
+    // --highlight-text-color: #ffffff;   /* Texto de elementos seleccionados */
+  
+    // --surface-ground: #f8f9fa;         /* Fondo general */
+    // --surface-section: #ffffff;        /* Fondo de secciones */
+    // --surface-card: #ffffff;           /* Fondo de tarjetas */
+    // --surface-overlay: #ffffff;        /* Fondos superpuestos */
+  
+    // --text-color: #495057;             /* Color de texto principal */
+    // --text-color-secondary: #6c757d;   /* Color de texto secundario */
+  
+    // --border-color: #dee2e6;           /* Color de bordes */
+    // --input-border-color: #ced4da;     /* Color del borde de los inputs */
+  
+    // --focus-ring: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Efecto de foco */
+  
+    // /* Botones */
+    // --button-bg: var(--primary-color);
+    // --button-text-color: var(--primary-color-text);
+  
+    /* Estados */
+    // --success-color: #28a745;          /* Color de éxito */
+    // --info-color: #17a2b8;             /* Color de información */
+    --warning-color: #FF905A;         /* Color de advertencia */
+    // --danger-color: #dc3545;           /* Color de error */
+  
+    /* Sombras */
+    // --shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    // --shadow-2: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    --green-500: #0AB39C;
+    --white: #ffffff;
+    --background: #F8FAFC;
+  }
