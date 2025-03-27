@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useState } from "react";
-import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
 import { Message } from "primereact/message";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
+
 import ServiceApp from "@/api/services";
 import { useTaxDataStore } from "@/store";
 
 const UploadCustom = () => {
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const { setForm } = useTaxDataStore();
 
@@ -24,12 +27,12 @@ const UploadCustom = () => {
     if (!file) return;
 
     if (file.type !== "application/pdf") {
-      setError("Solo se permiten archivos PDF.");
+      setError(t("messages.only_pdf_files_are_allowed"));
       return;
     }
 
     if (file.size > 500 * 1024) {
-      setError("El archivo no debe superar los 500 KB.");
+      setError(t("messages.the_file_must_not_exceed_500_KB"));
       return;
     }
     setError("");
@@ -53,14 +56,14 @@ const UploadCustom = () => {
         maxFileSize={500000}
         customUpload
         uploadHandler={onUpload}
-        chooseLabel="Seleccionar"
-        uploadLabel="Subir PDF"
-        cancelLabel="Cancelar"
+        chooseLabel={t('buttons.select')}
+        uploadLabel={t('buttons.upload_pdf')}
+        cancelLabel={t('buttons.cancel')}	
         chooseOptions={chooseOptions}
         uploadOptions={uploadOptions}
       />
 
-      <span className="text-xs font-light">Máximo 500 KB ・ PDF</span>
+      <span className="text-xs font-light">{t('description.maximum_500_KB_PDF')}</span>
       {error && <Message severity="error" text={error} className="mt-2" />}
     </div>
   );

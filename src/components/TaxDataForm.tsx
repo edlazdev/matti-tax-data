@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as Yup from "yup";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
@@ -10,61 +10,13 @@ import { useForm, Controller } from "react-hook-form";
 import { useTaxDataStore, useUtilStore } from "@/store";
 import { Cfdi } from "@/interfaces";
 import { InputNumber } from "primereact/inputnumber";
+import { taxDataSchema } from "@/schemas";
+import { TYPE_OF_PERSON } from "@/utils/constants"; // Ensure this import is correct and the module exports TYPE_OF_PERSON
 
 const listTypeOfPerson = [
-  { label: "Persona Física", value: "fisica" },
-  { label: "Persona Moral", value: "moral" },
+  { label: "Persona Física", value: TYPE_OF_PERSON.FISICA },
+  { label: "Persona Moral", value: TYPE_OF_PERSON.MORAL },
 ];
-
-const validationSchema = Yup.object().shape({
-  typeOfPerson: Yup.string()
-    .oneOf(["fisica", "moral"], "El tipo de persona no es válido")
-    .required("El tipo de persona es requerido"),
-
-  rfc: Yup.string()
-    .required("El RFC es requerido")
-    .when("typeOfPerson", {
-      is: (typeOfPerson: string) => typeOfPerson === "fisica",
-      then: (schema) =>
-        schema
-          .matches(
-            /^.{13}$/,
-            "El RFC debe tener 13 caracteres para personas físicas"
-          )
-          .required("El RFC es requerido"),
-      otherwise: (schema) =>
-        schema
-          .matches(
-            /^.{12}$/,
-            "El RFC debe tener 12 caracteres para personas morales"
-          )
-          .required("El RFC es requerido"),
-    }),
-
-  name: Yup.string().required("El nombre es requerido"),
-
-  email: Yup.string()
-    .email("Correo inválido")
-    .required("El correo es requerido"),
-
-  tax_regimen: Yup.string().required("El régimen fiscal es requerido"),
-
-  cfdi: Yup.string()
-    .required("El uso de CFDI es requerido")
-    .when("$isValid", (isValid, schema) =>
-      Array.isArray(isValid) && isValid[0]
-        ? schema
-        : schema.test(
-            "cfdi",
-            "El régimen fiscal no es válido para el uso de CFDI seleccionado",
-            (value, { parent }) => value === parent.tax_regimen
-          )
-    ),
-
-  zip_code: Yup.string()
-    .matches(/^\d{5}$/, "El código postal debe tener 5 dígitos")
-    .required("El código postal es requerido"),
-});
 
 const TaxDataForm = () => {
   const [selectCFDI, setSelectCFDI] = useState<string>("");
@@ -83,7 +35,7 @@ const TaxDataForm = () => {
     watch,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(taxDataSchema),
     context: { isValid: isValidCFDI },
     mode: "onChange",
     defaultValues: {
@@ -97,7 +49,10 @@ const TaxDataForm = () => {
     },
   });
 
-  const typeOfPerson = watch("typeOfPerson") as "" | "fisica" | "moral";
+  const typeOfPerson = watch("typeOfPerson") as
+    | ""
+    | TYPE_OF_PERSON.FISICA
+    | TYPE_OF_PERSON.MORAL;
   const rfc = watch("rfc");
   const name = watch("name");
   const email = watch("email");
@@ -106,7 +61,10 @@ const TaxDataForm = () => {
 
   useEffect(() => {
     if (form) {
-      setValue("typeOfPerson", form?.rfc.length === 13 ? "fisica" : "moral");
+      setValue(
+        "typeOfPerson",
+        form?.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL
+      );
       setValue("rfc", form?.rfc);
       setValue("name", form?.business_name);
       setValue("tax_regimen", form?.tax_regime);
@@ -115,22 +73,29 @@ const TaxDataForm = () => {
   }, [setValue, form]);
 
   const maxLength = useMemo(
-    () => (typeOfPerson === "fisica" ? 13 : 12),
+    () => (typeOfPerson === TYPE_OF_PERSON.FISICA ? 13 : 12),
     [typeOfPerson]
   );
 
   const listRegimenByPerson = useMemo(
-    () => listRegimen[typeOfPerson as "fisica" | "moral"] || [],
+    () =>
+      listRegimen[
+        typeOfPerson as TYPE_OF_PERSON.FISICA | TYPE_OF_PERSON.MORAL
+      ] || [],
     [listRegimen, typeOfPerson]
   );
   const listCFDIByPerson = useMemo(
-    () => listCFDI[typeOfPerson as "fisica" | "moral"] || [],
+    () =>
+      listCFDI[typeOfPerson as TYPE_OF_PERSON.FISICA | TYPE_OF_PERSON.MORAL] ||
+      [],
     [listCFDI, typeOfPerson]
   );
 
   const labelName = useMemo(
     () =>
-      typeOfPerson === "fisica" ? "Nombre del Contribuyente" : "Razón Social",
+      typeOfPerson === TYPE_OF_PERSON.FISICA
+        ? "Nombre del Contribuyente"
+        : "Razón Social",
     [typeOfPerson]
   );
 

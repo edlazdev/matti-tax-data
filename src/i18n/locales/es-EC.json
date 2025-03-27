@@ -1,0 +1,42 @@
+{
+  "accept": "Aceptar",
+  "buttons": {
+    "add_tax_data": "Añadir Datos Fiscales",
+    "cancel": "Cancelar",
+    "choose": "Elegir",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "save": "Guardar",
+    "select": "Seleccionar",
+    "send": "Enviar",
+    "update": "Actualizar",
+    "upload_pdf": "Subir PDF"
+  },
+  "description": {
+    "here_you_can_manage_your_registered_fiscal_data": "Aquí puedes gestionar tus datos fiscales registrados.",
+    "maximum_500_KB_PDF": "Máximo 500 KB ・ PDF",
+    "upload_your_tax_status_certificate_to_autocomplete_your_data": "Sube tu constancia de situación fiscal para autocompletar tus datos.",
+    "you_can_also_fill_them_manually": "También puedes completarlos manualmente."
+  },
+  "labels": {
+    "cfdi": "CFDI",
+    "email": "Correo electrónico",
+    "reason": "Razón Social",
+    "regimen": "Régimen Fiscal",
+    "taxpayer_name": "Nombre del Contribuyente",
+    "zip_code": "Código Postal"
+  },
+  "messages": {
+    "only_pdf_files_are_allowed": "Solo se permiten archivos PDF.",
+    "tax_data_added": "Datos fiscales añadidos correctamente.",
+    "tax_data_deleted": "Datos fiscales eliminados correctamente.",
+    "tax_data_error": "Error al gestionar los datos fiscales.",
+    "the_file_must_not_exceed_500_KB.": "El archivo no debe exceder 500 KB."
+  },
+  "title": {
+    "do_you_need_to_invoice": "¿Necesitas facturar?",
+    "tax_data": "Datos Fiscales"
+  }
+}

@@ -16,7 +16,6 @@ const App: React.FC = () => {
   const getTaxDataByUser = useCallback(async (id: string) => {
     try {
       const { data, status } = await ServiceApp.getTaxDataByUser(id);
-      console.log("🚀 ~ getTaxDataByUser ~ status:", status)
       setTaxData(data);
       setAction(data.length === 0 ? "add" : "");
       if (status === 200) fetchUtilData();
@@ -49,7 +48,7 @@ const App: React.FC = () => {
   return (
     <div className="flex justify-content-center align-items-center">
       <div className="grid-nogutter w-full">
-        <div className="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6 mx-auto">
+        <div className="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 mx-auto">
           {!isAddOrEdit ? <TaxDataList /> : <ContentForm />}
         </div>
       </div>
