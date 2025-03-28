@@ -25,6 +25,6 @@ export const useTaxDataStore = create<TaxDataStore>((set) => ({
     })),
   setAction: (action: ActionType) =>
     set({ action, isAddOrEdit: action === "add" || action === "edit" }),
-  setForm: (data: TaxDataUploadCert) => set({ form: data }),
+  setForm: (data: TaxDataUploadCert | TaxData | null) => set({ form: data }),
   setTaxData: (data: TaxData[]) => set({ taxData: data }),
 }));

@@ -1,55 +1,66 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useTranslation } from "react-i18next";
 
 import IconButton from "./IconButton";
-import { TaxData } from "@/interfaces";
+import { TaxData, TaxDataListProps } from "@/interfaces";
+import ServiceApp from "@/api/services";
+import { TYPE_OF_PERSON } from "@/utils/constants";
 import { useTaxDataStore, useUtilStore } from "@/store";
 import { searchByIdCFdi, searchByIdRegime } from "@/utils/functions";
-import { TYPE_OF_PERSON } from "@/utils/constants";
 
-const TaxDataList = () => {
+
+const TaxDataList = ({ onGetTaxData }: TaxDataListProps) => {
   const { t } = useTranslation();
 
   const taxData = useTaxDataStore((state) => state.taxData);
   const setAction = useTaxDataStore((state) => state.setAction);
+  const setForm = useTaxDataStore((state) => state.setForm);
   const removeTaxData = useTaxDataStore((state) => state.removeTaxData);
-  const changeVerification = useTaxDataStore(
-    (state) => state.changeVerification
-  );
+
   const listCFDI = useUtilStore((state) => state.listCFDI);
   const listRegimen = useUtilStore((state) => state.listRegimen);
 
-  const cardHeader = (id: string, rfc: string, verified: boolean) => (
+  const selectedTaxDataByRfc = useCallback(
+    async (rfc: string) => {
+      try {
+        const { status } = await ServiceApp.selectedTaxDataByRfc(rfc);
+        if (status === 200) {
+          onGetTaxData();
+        }
+      } catch (error) {
+        console.log("🚀 ~ async ~ error:", error);
+      }
+    },
+    [onGetTaxData]
+  );
+
+  const cardHeader = (rfc: string, selected: boolean) => (
     <div className="flex  align-items-center justify-content-between">
       <span className="text-lg font-bold">{rfc}</span>
-      {verified ? (
-        <Button
-          icon="pi pi-check-circle"
-          className="p-button-text p-button-sm"
-          disabled={verified}
-          severity="success"
-        />
+      {selected ? (
+        <i className="pi pi-check-circle" style={{ fontSize: "1rem", color: 'var(--secondary-teal)' }}></i>
       ) : (
         <Button
           size="small"
           severity="warning"
           label={t("buttons.choose")}
-          onClick={() => changeVerification(id)}
+          onClick={() => selectedTaxDataByRfc(rfc)}
         />
       )}
     </div>
   );
 
-  const cardFooter = (id: string) => (
+  const cardFooter = (data: TaxData) => (
     <div className="flex justify-content-start">
       <Button
         icon="pi pi-trash"
         className="p-button-text p-button-sm"
         severity="danger"
         tooltipOptions={{ position: "bottom" }}
-        onClick={() => removeTaxData(id)}
+        onClick={() => removeTaxData(data.id)}
         rounded
         text
       />
@@ -58,7 +69,10 @@ const TaxDataList = () => {
         className="p-button-text p-button-sm"
         tooltipOptions={{ position: "bottom" }}
         severity="secondary"
-        onClick={() => setAction("edit")}
+        onClick={() => {
+          setAction("edit");
+          setForm(data);
+        }}
         rounded
         text
       />
@@ -83,8 +97,8 @@ const TaxDataList = () => {
         {taxData.map((data: TaxData) => (
           <div key={data.id} className="col-12">
             <Card
-              header={cardHeader(data.id, data.rfc, data.verified)}
-              footer={cardFooter(data.id)}
+              header={cardHeader(data.rfc, data.selected)}
+              footer={cardFooter(data)}
               className="shadow-2 relative"
             >
               <p className="text-xs">
@@ -93,18 +107,28 @@ const TaxDataList = () => {
                   : t("labels.reason")}
                 : {data.name}
               </p>
-              <p className="text-xs">{t('labels.email')}: {data.email}</p>
+              <p className="text-xs">
+                {t("labels.email")}: {data.email}
+              </p>
               <p className="text-xs">
                 {t("labels.regimen")}:{" "}
                 {searchByIdRegime(
-                  listRegimen[data.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL],
+                  listRegimen[
+                    data.rfc.length === 13
+                      ? TYPE_OF_PERSON.FISICA
+                      : TYPE_OF_PERSON.MORAL
+                  ],
                   data.tax_regime
                 )}
               </p>
               <p className="text-xs">
                 {t("labels.cfdi")}:{" "}
                 {searchByIdCFdi(
-                  listCFDI[data.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL],
+                  listCFDI[
+                    data.rfc.length === 13
+                      ? TYPE_OF_PERSON.FISICA
+                      : TYPE_OF_PERSON.MORAL
+                  ],
                   data.cfdi_id
                 )}
               </p>
@@ -123,7 +147,10 @@ const TaxDataList = () => {
           className="p-button-rounded p-button-primary"
           text
           severity="success"
-          onClick={() => setAction("add")}
+          onClick={() => {
+            setAction("add");
+            setForm(null);
+          }}
         />
       </div>
     </div>

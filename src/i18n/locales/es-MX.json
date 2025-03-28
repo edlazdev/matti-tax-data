@@ -26,7 +26,10 @@
     "reason": "Razón Social",
     "regimen": "Régimen Fiscal",
     "taxpayer_name": "Nombre del Contribuyente",
-    "zip_code": "Código Postal"
+    "zip_code": "Código Postal",
+    "rfc": "RFC",
+    "type_of_person": "Tipo de Persona",
+    "use_cfdi": "Uso del CFDI"
   },
   "messages": {
     "only_pdf_files_are_allowed": "Solo se permiten archivos PDF.",

@@ -10,6 +10,11 @@ const services = {
   downloadCfdi: apiUrl + "/tax_data/api/v100/cfdi/download/", //GET rfc
   getCfdiTaxData: apiUrl + `/tax_data/api/v100/get_cfdi_data/cif_pdf`,
 
+  uploadTaxData: apiUrl + `/tax_data/api/v100/get_cfdi_data/cif_pdf`, //POST
+  saveCSFByRfc: apiUrl + `/tax_data/api/v100/cfdi/save_cfdi`, //rfc
+  selectedTaxDataByRfc: apiUrl + `/tax_data/api/v100/user_tax_data/selected/`, //POST rfc
+
+
   // CAMPUS TAX DATA
   getBusinessByCampusId: apiUrl + `/tax_data/api/v100/business/campus/`, //GET
 
@@ -20,7 +25,6 @@ const services = {
   //UTILS
   getCFDI: apiUrl + "/tax_data/api/v100/cfdi", //GET
   getTaxRegime: apiUrl + "/tax_data/api/v100/tax_regime", //GET
-  uploadTaxData: apiUrl + `/tax_data/api/v100/get_cfdi_data/cif_pdf`, //POST
 
   //DOCUMENTS TAX DATA
   uploadCerts: apiUrl + `/tax_data/api/v100/business/upload_certs/`, //POST

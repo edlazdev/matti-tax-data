@@ -1,5 +1,6 @@
 import { http } from "./axiosConfig";
 import { handleRequestError } from "@/utils/errorHandler";
+import { useUtilStore } from "@/store";
 
 http.interceptors.request.use(
   (config) => {
@@ -7,14 +8,22 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    useUtilStore.getState().setLoading(true);
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    useUtilStore.getState().setLoading(false);
+    Promise.reject(error);
+  }
 );
 
 http.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    useUtilStore.getState().setLoading(false);
+    return response;
+  },
   (error) => {
+    useUtilStore.getState().setLoading(false);
     handleRequestError(error);
     return Promise.reject(error);
   }

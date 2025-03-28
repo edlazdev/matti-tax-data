@@ -11,7 +11,9 @@ export interface ServicesAppType {
   getTaxDataParentsByStudentId: (id: string) => Promise<any>;
   getCFDI: () => Promise<any>;
   getTaxRegime: () => Promise<any>;
+  saveCSFByRfc: (rfc: string, file: File) => Promise<any>;
   getCfdiTaxData: (data: any) => Promise<any>;
+  selectedTaxDataByRfc: (rfc: string) => Promise<any>;
   uploadCerts: (
     cer: File,
     key: File,
@@ -19,4 +21,3 @@ export interface ServicesAppType {
     campus_id: string
   ) => Promise<any>;
 }
-

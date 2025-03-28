@@ -6,14 +6,18 @@ import { TaxDataForm, IconButton, UploadCustom } from "@/components";
 
 export default function ContentForm() {
   const { t } = useTranslation();
-  const { setAction } = useTaxDataStore();
+  const setAction = useTaxDataStore((state) => state.setAction);
+  const setForm = useTaxDataStore((state) => state.setForm);
 
   return (
     <div className="flex flex-column gap-4">
       <div className="flex align-items-center gap-3">
         <IconButton
           iconClass="pi pi-arrow-left"
-          onClick={() => setAction("")}
+          onClick={() => {
+            setAction("");
+            setForm(null);
+          }}
         />
         <p className="text-2xl sm:text-3xl font-bold">
           {t("title.do_you_need_to_invoice")}

@@ -35,15 +35,19 @@ export interface TaxData {
   city: null;
   department_code: null;
   municipality_code: null;
+  business_name?: string;
 }
 
 export interface TaxDataUploadCert {
-  business_name: string;
+  business_name?: string;
   rfc: string;
   status: string;
   tax_regime: string;
-  tax_regime_description: string;
+  tax_regime_description?: string;
   zip_code: string;
+  email?: string;
+  cfdi_id?: string;
+  name?: string;
 }
 
 export interface Cfdi {
@@ -67,4 +71,8 @@ export interface Regime {
   tax_regime_date: Date;
   due_date: Date;
   selected: boolean;
+}
+
+export interface TaxDataListProps {
+  onGetTaxData: () => void;
 }

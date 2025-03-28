@@ -1,8 +1,7 @@
-import { Cfdi, Regime } from "@/interfaces";
+import { Cfdi, Regime, TaxData } from "@/interfaces";
 import { numberFormats } from "../i18n/i18n";
 import i18n from "../i18n/i18n";
-
-
+import { TYPE_OF_PERSON } from "./constants";
 
 export const filterCfdi = (cfdi: Cfdi[]) => {
   return {
@@ -26,6 +25,18 @@ export const searchByIdCFdi = (cfdi: Cfdi[], id: string) => {
 export const searchByIdRegime = (regime: Regime[], id: string) => {
   const found = regime.find((item) => item.tax_regime_id === id);
   return found ? found.description : "No encontrado";
+};
+
+export const transformTaxData = (data: TaxData) => {
+  return {
+    business_name: data.name,
+    typeOfPerson: data.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL,
+    rfc: data.rfc,
+    email: data.email,
+    tax_regime: data.tax_regime,
+    cfdi: data.cfdi_id,
+    zip_code: data.zip_code,
+  };
 };
 
 export const currencyFormat = (value: number) => {

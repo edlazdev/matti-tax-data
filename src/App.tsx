@@ -2,7 +2,8 @@ import { useCallback, useEffect } from "react";
 
 import ServiceApp from "@/api/services";
 import { useTaxDataStore, useUserStore, useUtilStore } from "@/store";
-import { TaxDataList, ContentForm } from "@/components";
+import { TaxDataList, ContentForm, Loading } from "@/components";
+
 
 const App: React.FC = () => {
   const isAddOrEdit = useTaxDataStore((state) => state.isAddOrEdit);
@@ -13,17 +14,21 @@ const App: React.FC = () => {
   const setToken = useUserStore((state) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
 
-  const getTaxDataByUser = useCallback(async (id: string) => {
-    try {
-      const { data, status } = await ServiceApp.getTaxDataByUser(id);
-      setTaxData(data);
-      setAction(data.length === 0 ? "add" : "");
-      if (status === 200) fetchUtilData();
-      
-    } catch (error) {
-      console.log("🚀 ~ getTaxDataByUser ~ error:", error);
-    }
-  }, [fetchUtilData, setAction, setTaxData]);
+  const getTaxDataByUser = useCallback(
+    async (id: string) => {
+      try {
+        const { data, status } = await ServiceApp.getTaxDataByUser(
+          id ?? user?.id
+        );
+        setTaxData(data);
+        setAction(data.length === 0 ? "add" : "");
+        if (status === 200) fetchUtilData();
+      } catch (error) {
+        console.log("🚀 ~ getTaxDataByUser ~ error:", error);
+      }
+    },
+    [fetchUtilData, setAction, setTaxData, user?.id]
+  );
 
   useEffect(() => {
     if (user?.id) getTaxDataByUser(user.id);
@@ -46,13 +51,22 @@ const App: React.FC = () => {
   }, [setToken, setUser]);
 
   return (
-    <div className="flex justify-content-center align-items-center">
-      <div className="grid-nogutter w-full">
-        <div className="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 mx-auto">
-          {!isAddOrEdit ? <TaxDataList /> : <ContentForm />}
+    <>
+      <Loading />
+      <div className="flex justify-content-center align-items-center">
+        <div className="grid-nogutter w-full">
+          <div className="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 mx-auto">
+            {!isAddOrEdit ? (
+              <TaxDataList
+                onGetTaxData={() => getTaxDataByUser(user?.id ?? "")}
+              />
+            ) : (
+              <ContentForm />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

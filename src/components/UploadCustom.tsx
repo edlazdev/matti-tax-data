@@ -12,14 +12,18 @@ const UploadCustom = () => {
   const [error, setError] = useState("");
   const { setForm } = useTaxDataStore();
 
-  const getCfdiTaxData = useCallback(async (payload: any) => {
-    try {
-      const { data } = await ServiceApp.getCfdiTaxData(payload);
-      setForm(data);
-    } catch (error) {
-      console.log("🚀 ~ error:", error);
-    }
-  }, [setForm]);
+  const getCfdiTaxData = useCallback(
+    async (payload: any) => {
+      try {
+        const { data } = await ServiceApp.getCfdiTaxData(payload);
+        setForm(data);
+        await ServiceApp.saveCSFByRfc(data.rfc, payload);
+      } catch (error) {
+        console.log("🚀 ~ error:", error);
+      }
+    },
+    [setForm]
+  );
 
   const onUpload = (event: FileUploadHandlerEvent) => {
     const file = event.files[0];
@@ -40,7 +44,8 @@ const UploadCustom = () => {
   };
 
   const chooseOptions = {
-    className: "custom-choose-btn p-button-rounded p-button-warning p-button-sm",
+    className:
+      "custom-choose-btn p-button-rounded p-button-warning p-button-sm",
   };
   const uploadOptions = {
     className:
@@ -56,14 +61,16 @@ const UploadCustom = () => {
         maxFileSize={500000}
         customUpload
         uploadHandler={onUpload}
-        chooseLabel={t('buttons.select')}
-        uploadLabel={t('buttons.upload_pdf')}
-        cancelLabel={t('buttons.cancel')}	
+        chooseLabel={t("buttons.select")}
+        uploadLabel={t("buttons.upload_pdf")}
+        cancelLabel={t("buttons.cancel")}
         chooseOptions={chooseOptions}
         uploadOptions={uploadOptions}
       />
 
-      <span className="text-xs font-light">{t('description.maximum_500_KB_PDF')}</span>
+      <span className="text-xs font-light">
+        {t("description.maximum_500_KB_PDF")}
+      </span>
       {error && <Message severity="error" text={error} className="mt-2" />}
     </div>
   );

@@ -15,6 +15,8 @@ export const useUtilStore = create<UtilStore>()(
         fisica: [],
         moral: [],
       },
+      loading: false,
+      setLoading: (loading: boolean) => set({ loading }),
       fetchUtilData: () => {
         if (get().listCFDI.fisica.length > 0 && get().listRegimen.fisica.length > 0) {
           return; // Evita llamadas innecesarias

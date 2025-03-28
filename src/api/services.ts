@@ -107,6 +107,19 @@ const ServiceApp: ServicesAppType = {
       },
     });
   },
+  saveCSFByRfc: (rfc, csf) => {
+    return http.post(
+      `${services.saveCSFByRfc}?rfc=${rfc}`,
+      {
+        csf: csf,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  },
   uploadCerts: (cer, key, pass, campus_id: string) => {
     return http.post(
       `${services.uploadCerts}?campus_id=${campus_id}&password=${pass}`,
@@ -121,6 +134,13 @@ const ServiceApp: ServicesAppType = {
       }
     );
   },
+  selectedTaxDataByRfc: (rfc: string) => {
+    return http.post(`${services.selectedTaxDataByRfc}${rfc}`, null, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 };
 
 export default ServiceApp;

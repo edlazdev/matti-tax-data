@@ -12,19 +12,31 @@ import { Cfdi } from "@/interfaces";
 import { InputNumber } from "primereact/inputnumber";
 import { taxDataSchema } from "@/schemas";
 import { TYPE_OF_PERSON } from "@/utils/constants"; // Ensure this import is correct and the module exports TYPE_OF_PERSON
+import { useTranslation } from "react-i18next";
 
 const listTypeOfPerson = [
   { label: "Persona Física", value: TYPE_OF_PERSON.FISICA },
   { label: "Persona Moral", value: TYPE_OF_PERSON.MORAL },
 ];
 
+interface FormValues {
+  typeOfPerson?: TYPE_OF_PERSON;
+  rfc: string;
+  name: string;
+  email: string;
+  tax_regimen: string;
+  cfdi: string;
+  zip_code: string;
+}
+
 const TaxDataForm = () => {
+  const { t } = useTranslation();
   const [selectCFDI, setSelectCFDI] = useState<string>("");
   const [selectRegimen, setSelectRegimen] = useState<string>("");
   const [isValidCFDI, setIsValidCFDI] = useState<boolean>(false);
 
   const form = useTaxDataStore((state) => state.form);
-
+  const action = useTaxDataStore((state) => state.action);
   const listCFDI = useUtilStore((state) => state.listCFDI);
   const listRegimen = useUtilStore((state) => state.listRegimen);
 
@@ -60,17 +72,22 @@ const TaxDataForm = () => {
   const cfdi = watch("cfdi");
 
   useEffect(() => {
-    if (form) {
-      setValue(
-        "typeOfPerson",
-        form?.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL
-      );
-      setValue("rfc", form?.rfc);
-      setValue("name", form?.business_name);
-      setValue("tax_regimen", form?.tax_regime);
-      setValue("zip_code", form?.zip_code);
-    }
-  }, [setValue, form]);
+    if (!form) return;
+    const updatedValues: Partial<FormValues> = {
+      typeOfPerson:
+        form.rfc.length === 13 ? TYPE_OF_PERSON.FISICA : TYPE_OF_PERSON.MORAL,
+      rfc: form.rfc,
+      name: action === "edit" ? form.name ?? "" : form?.business_name,
+      tax_regimen: form.tax_regime,
+      zip_code: form.zip_code,
+      email: action === "edit" ? form.email ?? "" : "",
+      cfdi: action === "edit" ? form.cfdi_id ?? "" : "",
+    };
+
+    Object.entries(updatedValues).forEach(([key, value]) =>
+      setValue(key as keyof FormValues, value)
+    );
+  }, [setValue, form, action]);
 
   const maxLength = useMemo(
     () => (typeOfPerson === TYPE_OF_PERSON.FISICA ? 13 : 12),
@@ -94,9 +111,9 @@ const TaxDataForm = () => {
   const labelName = useMemo(
     () =>
       typeOfPerson === TYPE_OF_PERSON.FISICA
-        ? "Nombre del Contribuyente"
-        : "Razón Social",
-    [typeOfPerson]
+        ? t("labels.taxpayer_name")
+        : t("labels.reason"),
+    [t, typeOfPerson]
   );
 
   useEffect(() => {
@@ -121,13 +138,13 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="typeOfPerson" className="text-xs">
-              Tipo de Persona
+              {t("labels.type_of_person")}
             </label>
             <Dropdown
               {...field}
               id="typeOfPerson"
               options={listTypeOfPerson}
-              placeholder="Tipo de Persona"
+              placeholder={t("labels.type_of_person")}
               onChange={(e) => {
                 field.onChange(e.value);
                 setValue("rfc", "");
@@ -147,12 +164,12 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="rfc" className="text-xs">
-              RFC
+              {t("labels.rfc")}
             </label>
             <InputText
               {...field}
               id="rfc"
-              placeholder="RFC"
+              placeholder={t("labels.rfc")}
               onChange={(e) => field.onChange(e.target.value.toUpperCase())}
               invalid={!!errors.rfc}
               disabled={!typeOfPerson}
@@ -191,12 +208,12 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="email" className="text-xs">
-              Correo Electrónico
+              {t("labels.email")}
             </label>
             <InputText
               {...field}
               id="email"
-              placeholder="Correo Electrónico"
+              placeholder={t("labels.email")}
               invalid={!!errors.email}
               disabled={!name}
               className="p-inputtext-sm"
@@ -212,13 +229,13 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="tax_regimen" className="text-xs">
-              Régimen Fiscal
+              {t("labels.regimen")}
             </label>
             <Dropdown
               {...field}
               id="tax_regimen"
               options={listRegimenByPerson}
-              placeholder="Régimen Fiscal"
+              placeholder={t("labels.regimen")}
               optionLabel="description"
               optionValue="tax_regime_id"
               onChange={(e) => {
@@ -240,13 +257,13 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="cfdi" className="text-xs">
-              Uso de CFDI
+              {t("labels.use_cfdi")}
             </label>
             <Dropdown
               {...field}
               id="cfdi"
               options={listCFDIByPerson}
-              placeholder="Uso de CFDI"
+              placeholder={t("labels.cfdi")}
               optionLabel="description"
               optionValue="cfdi_id"
               onChange={(e) => {
@@ -268,12 +285,12 @@ const TaxDataForm = () => {
         render={({ field }) => (
           <div className="flex flex-column gap-1">
             <label htmlFor="zip_code" className="text-xs">
-              Código Postal
+              {t("labels.zip_code")}
             </label>
             <InputNumber
               {...field}
               id="zip_code"
-              placeholder="Código Postal"
+              placeholder={t("labels.zip_code")}
               useGrouping={false}
               value={field.value ? Number(field.value) : undefined}
               invalid={!!errors.zip_code}
